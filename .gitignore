@@ -1,0 +1,11 @@
+v8/
+depot_tools/
+View8/
+v8dasm/
+disasm
+*.dump
+.gclient*
+.gcs_entries
+out/
+node_modules/
+*.o
