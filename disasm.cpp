@@ -73,15 +73,12 @@ static void loadAndDisassemble(uint8_t* bytecodeBuffer, int len) {
 
     auto cached_data = new ScriptCompiler::CachedData(bytecodeBuffer, len);
     auto ctx = isolate->GetCurrentContext();
-    ScriptOrigin origin(String::NewFromUtf8(isolate, "code.jsc").ToLocalChecked());
-    ScriptCompiler::Source source(
-        String::NewFromUtf8(isolate, dummyCode.c_str()).ToLocalChecked(),
-        origin,
-        cached_data
-    );
+    auto dummyStr = String::NewFromUtf8(isolate, dummyCode.c_str()).ToLocalChecked();
+    ScriptOrigin origin(dummyStr);
+    ScriptCompiler::Source source(dummyStr, origin, cached_data);
 
-    auto maybeScript = ScriptCompiler::CompileUnboundScript(
-        isolate, &source, ScriptCompiler::kConsumeCodeCache
+    auto maybeScript = ScriptCompiler::Compile(
+        ctx, &source, ScriptCompiler::kConsumeCodeCache
     );
 
     if (maybeScript.IsEmpty()) {
